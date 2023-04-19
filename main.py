@@ -2,7 +2,7 @@ import pdfkit
 import aiohttp
 import uvicorn
 from fastapi import FastAPI
-from fastapi.responses import RedirectResponse, StreamingResponse
+from fastapi.responses import RedirectResponse, FileResponse
 from config import resp
 from src import download_file_to_tempfile
 
@@ -19,8 +19,10 @@ async def download_file(url: str):
     extension = url.split(".")[-1]
     file_path = await download_file_to_tempfile(url)
     options = {
-        'no-stop-slow-scripts': None,
-        "encoding": "UTF-8"
+        'encoding': 'UTF-8',
+        'enable-local-file-access': True
     }
-    pdfkit.from_file(file_path, "test.pdf", options=options, configuration=pdfkit.configuration(wkhtmltopdf=resp))
-    return StreamingResponse(open('test.pdf', "rb"), media_type='application/pdf')
+    with open('test.html', "r") as f:
+        content = f.read()
+    pdfkit.from_string(content, "test.pdf", options=options, configuration=pdfkit.configuration(wkhtmltopdf=resp))
+    return FileResponse("test.pdf", media_type="application/pdf")
