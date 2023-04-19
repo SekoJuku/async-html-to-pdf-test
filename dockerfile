@@ -8,9 +8,9 @@ RUN pip install pipenv
 WORKDIR /app
 
 # Install wget
-RUN apt-get update && apt-get install libssl-dev -y
+RUN apt-get update && apt-get install libssl-dev wkhtmltopdf -y
 
-# RUN apt-get install -f ./wkhtmltox_0.12.6-1.buster_amd64.deb
+#RUN apt-get install -f ./wkhtmltox_0.12.6.1-2.buster_ppc64el.deb
 
 # Copy Pipfile and Pipfile.lock
 COPY requirements.txt .
